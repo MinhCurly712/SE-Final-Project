@@ -23,20 +23,35 @@ namespace cuoiki_winform
 
         }
 
-        private void DisplayProducts()
-        {
-            string connectionString = "YOUR_CONNECTION_STRING_HERE";
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                string query = "SELECT * FROM Products";
-                SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-                DataTable productsTable = new DataTable();
-                adapter.Fill(productsTable);
-                dataGridView1.DataSource = productsTable;
-            }
-        }
         private void Staffuse_Load(object sender, EventArgs e) {
-        
+            // Create a connection to the database
+            SqlConnection connection = new SqlConnection("Data Source=THIENHUY\\SQLEXPRESS;Initial Catalog=finalproject;Integrated Security=True");
+
+            // Create a command to retrieve the data
+            SqlCommand command = new SqlCommand("SELECT * FROM Products", connection);
+
+            // Create a DataTable to store the data
+            DataTable dataTable = new DataTable();
+
+            // Open the connection and retrieve the data
+            connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+            dataTable.Load(reader);
+            connection.Close();
+
+            // Bind the DataTable to the DataGridView
+            dataGridView1.DataSource = dataTable;
+        }
+
+        private void goodReceived_Click(object sender, EventArgs e)
+        {
+            Create_Goods_Received create = new Create_Goods_Received();
+            create.Show();
+            this.Hide();
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
 
         }
     }
