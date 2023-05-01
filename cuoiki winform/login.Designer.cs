@@ -60,6 +60,7 @@ namespace cuoiki_winform
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(437, 26);
             this.txtUsername.TabIndex = 2;
+            this.txtUsername.TextChanged += new System.EventHandler(this.txtUsername_TextChanged);
             // 
             // label
             // 

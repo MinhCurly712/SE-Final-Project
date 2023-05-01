@@ -32,7 +32,7 @@ namespace cuoiki_winform
             string idproduct = txtIDPro.Text;
             int quantity = int.Parse(txtQuantity.Text);
             int unitprice = int.Parse(txtUnitPrice.Text);
-
+            
             if (string.IsNullOrEmpty(receiptNo))
             {
                 MessageBox.Show("Please enter a receipt number.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -66,6 +66,7 @@ namespace cuoiki_winform
                 MessageBox.Show("Please enter a valid price.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            
 
 
         }
@@ -97,6 +98,8 @@ namespace cuoiki_winform
                 // Show a message box indicating that the data was not saved
                 MessageBox.Show("Data not saved.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            DisplayData1();
         }
 
         private void bSave2_Click(object sender, EventArgs e)
@@ -116,6 +119,7 @@ namespace cuoiki_winform
             command.Parameters.AddWithValue("@quantity", quantity);
             command.Parameters.AddWithValue("@unitprice", unitprice);
             int rowsAffected = command.ExecuteNonQuery();
+
             connection.Close();
             if (rowsAffected > 0)
             {
@@ -127,7 +131,59 @@ namespace cuoiki_winform
                 // Show a message box indicating that the data was not saved
                 MessageBox.Show("Data not saved.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            txtIDRe.Text = "";
+            txtIDPro.Text = "";
+            txtQuantity.Text = "";
+            txtUnitPrice.Text = "";
+            txtIDRe.Focus();
+            DisplayData2();
 
-        }   
+
+        }
+
+        private void DisplayData1()
+        {
+            string connectionString = "Data Source=THIENHUY\\SQLEXPRESS;Initial Catalog=finalproject;Integrated Security=True";
+            string query = "SELECT * FROM WarehouseReceipt";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                connection.Open();
+
+                SqlDataAdapter adapter = new SqlDataAdapter(command);
+                DataTable dataTable = new DataTable();
+                adapter.Fill(dataTable);
+
+                dataGridView1.DataSource = dataTable;
+
+                connection.Close();
+            }
+        }
+
+        private void DisplayData2()
+        {
+            string connectionString = "Data Source=THIENHUY\\SQLEXPRESS;Initial Catalog=finalproject;Integrated Security=True";
+            string query = "SELECT * FROM DetailsWarehouseReceipt";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                connection.Open();
+
+                SqlDataAdapter adapter = new SqlDataAdapter(command);
+                DataTable dataTable = new DataTable();
+                adapter.Fill(dataTable);
+
+                dataGridView2.DataSource = dataTable;
+
+                connection.Close();
+            }
+        }
+
+        private void bExit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }
