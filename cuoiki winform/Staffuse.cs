@@ -54,5 +54,12 @@ namespace cuoiki_winform
         {
 
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Goods_Delivery_Note create = new Goods_Delivery_Note();
+            create.Show();
+            this.Hide();
+        }
     }
 }

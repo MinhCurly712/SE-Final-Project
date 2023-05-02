@@ -25,9 +25,10 @@ namespace cuoiki_winform
             int totalmoney;
             if (!int.TryParse(txtTotal.Text, out totalmoney))
             {
-                MessageBox.Show("Please enter a valid integer value for TotalMoney.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please enter a data.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
+
             string idreceipt = txtIDRe.Text;
             string idproduct = txtIDPro.Text;
             int quantity = int.Parse(txtQuantity.Text);

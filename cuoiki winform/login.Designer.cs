@@ -104,6 +104,7 @@ namespace cuoiki_winform
             this.Controls.Add(this.label1);
             this.Name = "loginform";
             this.Text = "Login";
+            this.Load += new System.EventHandler(this.loginform_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

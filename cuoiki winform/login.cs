@@ -72,8 +72,7 @@ namespace cuoiki_winform
             command.Dispose();
             connection.Close();
         }
-        private string maskedPassword = "";
-
+ 
         private void txtPassword_TextChanged(object sender, EventArgs e)
         {
    
@@ -82,6 +81,11 @@ namespace cuoiki_winform
         private void txtUsername_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void loginform_Load(object sender, EventArgs e)
+        {
+            txtUsername.Select();
         }
     }
 }
