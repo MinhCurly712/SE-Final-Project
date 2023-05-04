@@ -25,7 +25,7 @@ namespace cuoiki_winform
             int totalmoney;
             if (!int.TryParse(txtTotal.Text, out totalmoney))
             {
-                MessageBox.Show("Please enter a data.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Please enter a data.", "Information", MessageBoxButtons.OK);
                 return;
             }
 

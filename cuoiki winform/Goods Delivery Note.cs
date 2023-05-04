@@ -14,6 +14,8 @@ namespace cuoiki_winform
 {
     public partial class Goods_Delivery_Note : Form
     {
+        private string connectionString;
+
         public Goods_Delivery_Note()
         {
             InitializeComponent();
@@ -26,7 +28,7 @@ namespace cuoiki_winform
             int totalcost;
             if (!int.TryParse(txtTotalcost.Text, out totalcost))
             {
-                MessageBox.Show("Please enter a details.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please enter a data.", "Information", MessageBoxButtons.OK);
                 return;
             }
             int totalquantity = int.Parse(txtTotalquantity.Text);
@@ -105,7 +107,6 @@ namespace cuoiki_winform
             command.Parameters.AddWithValue("@totalquantity", totalquantity);
             command.Parameters.AddWithValue("@totalcost", totalcost);
             int rowsAffected = command.ExecuteNonQuery();
-            connection.Close();
             if (rowsAffected > 0)
             {
                 // Show a message box indicating that the data was saved
@@ -116,10 +117,25 @@ namespace cuoiki_winform
                 // Show a message box indicating that the data was not saved
                 MessageBox.Show("Data not saved.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            connection.Close();
 
             DisplayData1();
-        }
+            insert_status();
+            DisplayData3();
 
+        }
+        private void insert_status()
+        {
+            string ID = txtID.Text;
+            SqlConnection connection = new SqlConnection("Data Source=THIENHUY\\SQLEXPRESS;Initial Catalog=finalproject;Integrated Security=True");
+            connection.Open();
+            string insertStatement = "INSERT INTO Status VALUES (@idnote, @orderStatus,@paymentStatus)";
+            SqlCommand command = new SqlCommand(insertStatement, connection);
+            command.Parameters.AddWithValue("@idnote", ID);
+            command.Parameters.AddWithValue("@orderStatus", "not delivered");
+            command.Parameters.AddWithValue("@paymentStatus","unpaid");
+            connection.Close();
+        }
         private void bSave2_Click(object sender, EventArgs e)
         {
 
@@ -151,23 +167,25 @@ namespace cuoiki_winform
                 // Show a message box indicating that the data was not saved
                 MessageBox.Show("Data not saved.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            DisplayData2();
             txtIDnote.Text = "";
             txtIDPro.Text = "";
             txtQuantity.Text = "";
             txtUnit.Text = "";
-            txtName.Focus();
-            DisplayData2();
+            txtName.Text ="";
+            txtIDnote.Focus();
         }
         private void DisplayData1()
         {
+            string ID = txtID.Text;
             string connectionString = "Data Source=THIENHUY\\SQLEXPRESS;Initial Catalog=finalproject;Integrated Security=True";
-            string query = "SELECT * FROM DeliveryNote where idNote = @ID";
+            string query = "SELECT * FROM DeliveryNote where idNote = @idnote";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             using (SqlCommand command = new SqlCommand(query, connection))
             {
                 connection.Open();
-
+                command.Parameters.AddWithValue("@idNote", ID);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
                 DataTable dataTable = new DataTable();
                 adapter.Fill(dataTable);
@@ -180,6 +198,7 @@ namespace cuoiki_winform
 
         private void DisplayData2()
         {
+            string idnote = txtIDnote.Text;
             string connectionString = "Data Source=THIENHUY\\SQLEXPRESS;Initial Catalog=finalproject;Integrated Security=True";
             string query = "SELECT * FROM DetailsDeliveryNote where idNote = @idnote";
 
@@ -187,7 +206,7 @@ namespace cuoiki_winform
             using (SqlCommand command = new SqlCommand(query, connection))
             {
                 connection.Open();
-
+                command.Parameters.AddWithValue("@idNote", idnote);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
                 DataTable dataTable = new DataTable();
                 adapter.Fill(dataTable);
@@ -198,6 +217,26 @@ namespace cuoiki_winform
             }
         }
 
+        private void DisplayData3()
+        {
+            string ID = txtID.Text;
+            string connectionString = "Data Source=THIENHUY\\SQLEXPRESS;Initial Catalog=finalproject;Integrated Security=True";
+            string query = "SELECT * FROM Status where idNote = @ID";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                connection.Open();
+                command.Parameters.AddWithValue("@ID", ID);
+                SqlDataAdapter adapter = new SqlDataAdapter(command);
+                DataTable dataTable = new DataTable();
+                adapter.Fill(dataTable);
+
+                dataGridView3.DataSource = dataTable;
+
+                connection.Close();
+            }
+        }
         private void bExit_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -212,6 +251,8 @@ namespace cuoiki_winform
         }
         private void PrintPage(object sender, PrintPageEventArgs e)
         {
+            string ID = txtID.Text;
+
             // Define the font for the title and column headers
             Font titleFont = new Font("Arial", 16, FontStyle.Bold);
             Font headerFont = new Font("Arial", 12, FontStyle.Bold);
@@ -231,7 +272,9 @@ namespace cuoiki_winform
             // Retrieve data from database
             using (SqlConnection conn = new SqlConnection("Data Source=THIENHUY\\SQLEXPRESS;Initial Catalog=finalproject;Integrated Security=True"))
             {
-                SqlCommand cmd = new SqlCommand("SELECT * FROM DeliveryNote where idNote = @ID", conn);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM DeliveryNote where idNote = @ID ", conn);
+                cmd.Parameters.AddWithValue("@ID", ID);
+
                 conn.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -251,6 +294,8 @@ namespace cuoiki_winform
 
             // Draw the title in the header
             e.Graphics.DrawString(title, titleFont, textBrush, titleRect);
+
+            int lineSpacing = 20; // Set the line spacing to 20 pixels
 
             // Draw the column headers
             float x = e.MarginBounds.Left;
@@ -272,10 +317,97 @@ namespace cuoiki_winform
                     x += e.MarginBounds.Width / columnNames.Length + 36;
                 }
                 x = e.MarginBounds.Left;
+                y += lineSpacing;
+                y += 30;
+            }
+
+            y += 50;
+
+
+            // Define the column names and data
+            string[] columnNames1 = { "ID", "ID Product", "Name", "Quantity", "Unit Cost" };
+            List<string[]> data1 = new List<string[]>();
+
+            // Retrieve data from database
+            using (SqlConnection conn = new SqlConnection("Data Source=THIENHUY\\SQLEXPRESS;Initial Catalog=finalproject;Integrated Security=True"))
+            {
+                SqlCommand cmd = new SqlCommand("SELECT * FROM DetailsDeliveryNote where idNote = @ID ", conn);
+                cmd.Parameters.AddWithValue("@ID",ID);
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    data1.Add(new string[] { reader["idNote"].ToString(), reader["idProducts"].ToString(), reader["nameProducts"].ToString(), reader["quantity"].ToString(), reader["unitcost"].ToString() });
+                }
+            }
+            e.Graphics.DrawString(title, titleFont, textBrush, titleRect);
+
+            // Draw the column headers
+
+            for (int i = 0; i < columnNames1.Length; i++)
+            {
+                e.Graphics.DrawString(columnNames1[i], headerFont, textBrush, x, y);
+                x += e.MarginBounds.Width / columnNames1.Length + 33;
+            }
+
+            // Draw the data
+            x = e.MarginBounds.Left;
+            y += 20;
+            for (int i = 0; i < data1.Count; i++)
+            {
+                for (int j = 0; j < data1[i].Length; j++)
+                {
+                    e.Graphics.DrawString(data1[i][j], headerFont, textBrush, x, y);
+                    x += e.MarginBounds.Width / columnNames1.Length + 36;
+                }
+                x = e.MarginBounds.Left;
                 y += 30;
             }
         }
 
+        private void bSave3_Click(object sender, EventArgs e)
+        {
+            string ID = txtID.Text;
+            string connectionString = "Data Source=THIENHUY\\SQLEXPRESS;Initial Catalog=finalproject;Integrated Security=True";
+            if (comboBox1.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a value from the combo box.");
+                return;
+            }
+            if (comboBox2.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a value from the combo box.");
+                return;
+            }
+            string selectedValue1 = comboBox1.SelectedItem.ToString();
+            string selectedValue2 = comboBox2.SelectedItem.ToString();
+            string query1 = "UPDATE Status SET orderStatus = @SelectedValue1 WHERE idNote = @ID";
+            string query2 = "UPDATE Status SET paymentStatus = @SelectedValue2 WHERE idNote = @ID";
+            using (SqlConnection connection1 = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand(query1, connection1))
+            {
+                command.Parameters.AddWithValue("@SelectedValue1", selectedValue1);
+                command.Parameters.AddWithValue("@ID",ID);
+                connection1.Open();
+                int rowsAffected = command.ExecuteNonQuery();
+                if (rowsAffected > 0)
+                {
+                    MessageBox.Show("Data updated successfully.");
+                }
+                else
+                {
+                    MessageBox.Show("No data was updated.");
+                }
+            }
+            using (SqlConnection connection2 = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand(query2, connection2))
+            {
+                command.Parameters.AddWithValue("@SelectedValue2", selectedValue2);
+                command.Parameters.AddWithValue("@ID",ID);
+                connection2.Open();
+            }
+            DisplayData3();
+        }
     }
 
 }
