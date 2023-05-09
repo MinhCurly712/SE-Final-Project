@@ -61,5 +61,12 @@ namespace cuoiki_winform
             create.Show();
             this.Hide();
         }
+
+        private void bView_Click(object sender, EventArgs e)
+        {
+            View_Report create = new View_Report();
+            create.Show();
+            this.Hide();
+        }
     }
 }
