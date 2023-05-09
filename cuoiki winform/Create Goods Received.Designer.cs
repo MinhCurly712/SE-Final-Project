@@ -29,6 +29,7 @@ namespace cuoiki_winform
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Create_Goods_Received));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.bSave1 = new System.Windows.Forms.Button();
             this.dtDay = new System.Windows.Forms.DateTimePicker();
@@ -52,6 +53,8 @@ namespace cuoiki_winform
             this.groupbox4 = new System.Windows.Forms.GroupBox();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.bExit = new System.Windows.Forms.Button();
+            this.bPrint = new System.Windows.Forms.Button();
+            this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -268,7 +271,7 @@ namespace cuoiki_winform
             // 
             // bExit
             // 
-            this.bExit.Location = new System.Drawing.Point(944, 177);
+            this.bExit.Location = new System.Drawing.Point(955, 328);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(121, 41);
             this.bExit.TabIndex = 5;
@@ -277,11 +280,32 @@ namespace cuoiki_winform
             this.bExit.UseVisualStyleBackColor = true;
             this.bExit.Click += new System.EventHandler(this.bExit_Click);
             // 
+            // bPrint
+            // 
+            this.bPrint.Location = new System.Drawing.Point(955, 124);
+            this.bPrint.Name = "bPrint";
+            this.bPrint.Size = new System.Drawing.Size(105, 41);
+            this.bPrint.TabIndex = 6;
+            this.bPrint.Text = "Print";
+            this.bPrint.UseVisualStyleBackColor = true;
+            this.bPrint.Click += new System.EventHandler(this.bPrint_Click);
+            // 
+            // printPreviewDialog1
+            // 
+            this.printPreviewDialog1.AutoScrollMargin = new System.Drawing.Size(0, 0);
+            this.printPreviewDialog1.AutoScrollMinSize = new System.Drawing.Size(0, 0);
+            this.printPreviewDialog1.ClientSize = new System.Drawing.Size(400, 300);
+            this.printPreviewDialog1.Enabled = true;
+            this.printPreviewDialog1.Icon = ((System.Drawing.Icon)(resources.GetObject("printPreviewDialog1.Icon")));
+            this.printPreviewDialog1.Name = "printPreviewDialog1";
+            this.printPreviewDialog1.Visible = false;
+            // 
             // Create_Goods_Received
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1303, 792);
+            this.Controls.Add(this.bPrint);
             this.Controls.Add(this.bExit);
             this.Controls.Add(this.groupbox4);
             this.Controls.Add(this.groupBox3);
@@ -327,5 +351,7 @@ namespace cuoiki_winform
         private System.Windows.Forms.GroupBox groupbox4;
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.Button bExit;
+        private System.Windows.Forms.Button bPrint;
+        private System.Windows.Forms.PrintPreviewDialog printPreviewDialog1;
     }
 }

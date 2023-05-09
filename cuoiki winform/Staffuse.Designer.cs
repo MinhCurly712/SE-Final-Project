@@ -34,6 +34,7 @@ namespace cuoiki_winform
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.bView = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -73,6 +74,7 @@ namespace cuoiki_winform
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.bView);
             this.groupBox2.Controls.Add(this.button1);
             this.groupBox2.Controls.Add(this.goodReceived);
             this.groupBox2.Location = new System.Drawing.Point(27, 12);
@@ -91,6 +93,16 @@ namespace cuoiki_winform
             this.button1.Text = "Create Goods Delivery Note";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // bView
+            // 
+            this.bView.Location = new System.Drawing.Point(557, 41);
+            this.bView.Name = "bView";
+            this.bView.Size = new System.Drawing.Size(199, 38);
+            this.bView.TabIndex = 3;
+            this.bView.Text = "View report";
+            this.bView.UseVisualStyleBackColor = true;
+            this.bView.Click += new System.EventHandler(this.bView_Click);
             // 
             // Staffuse
             // 
@@ -116,5 +128,6 @@ namespace cuoiki_winform
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button bView;
     }
 }
